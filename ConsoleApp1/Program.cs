@@ -10,38 +10,82 @@ namespace ConsoleApp1
     {
         public static async Task Main(string[] args)
         {
+            //W sytuacji kiedy parametr 1 nie został przekazany, powinniśmy zgłosić błąd ArgumentNullException
+            if (args.Length > 0) {
 
-            foreach (var a in args)
-            {
-                Console.WriteLine(a);
+                foreach (var a in args)
+                {
+                    //W sytuacji kiedy przekazany parametr nie jest poprawnym adresem URL, powinniśmy zgłosić ArgumentException()
+                    if (await IsValidURL(a))
+                    {
+                        Console.WriteLine(a);
+                    }
+                    else
+                    {
+                        throw new ArgumentException();
+                    }
+                }
+
+                var emails = await GetEmails(args[0]);
+                //var emails = await GetEmails("https://www.pja.edu.pl/");
+
+                foreach (var email in emails)
+                {
+                    Console.WriteLine(email);
+                }
+
             }
-
-            //var emails = await GetEmails(args[0]);
-            var emails = await GetEmails("https://www.pja.edu.pl/");
-
-            foreach (var email in emails)
+            else
             {
-                Console.WriteLine(email);
+                throw new ArgumentNullException();
             }
+            
+        }
+
+        static async Task<bool> IsValidURL(string URL)
+        {
+            string Pattern = @"^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$";
+            Regex Rgx = new Regex(Pattern, RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            return Rgx.IsMatch(URL);
         }
 
         static async Task<IList<string>> GetEmails(string url)
         {
             var httpClient = new HttpClient();
             var listOfEmails = new List<string>();
-            var response = await httpClient.GetAsync(url);
-            string responseBody = await response.Content.ReadAsStringAsync();
+            HttpResponseMessage response = null;
+            //W sytuacji kiedy podczas pobierania wystąpił błąd - wyświetlamy informację "Błąd w czasie pobierania strony".
 
-            Regex emailRegex = new Regex(@"\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*",  RegexOptions.IgnoreCase);
-            //find items that matches with our pattern
-            MatchCollection emailMatches = emailRegex.Matches(responseBody);
-
-            foreach (var emailMatche in emailMatches)
+            try
             {
-                listOfEmails.Add(emailMatche.ToString());
-            }
+                response = await httpClient.GetAsync(url);
+                string responseBody = await response.Content.ReadAsStringAsync();
 
-            return listOfEmails;
+                //Powinniśmy w poprawny sposób zwalniać zasoby (wykorzystanie metody Dispose()) związane z wykorzystaniem klasy HttpClient
+                response.Dispose();
+
+                Regex emailRegex = new Regex(@"\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*",  RegexOptions.IgnoreCase);
+                //find items that matches with our pattern
+                MatchCollection emailMatches = emailRegex.Matches(responseBody);
+
+                if (emailMatches.Count == 0)
+                {
+                    Console.WriteLine("Nie znaleziono adresów email");
+                }
+
+                foreach (var emailMatche in emailMatches)
+                {
+                    listOfEmails.Add(emailMatche.ToString());
+                }
+
+                return listOfEmails;
+            }
+            catch (HttpRequestException e)
+            {
+                Console.WriteLine("\nBłąd w czasie pobierania strony");
+                Console.WriteLine("Message :{0} ", e.Message);
+                return "brak";
+            }
         }
     }
 }
