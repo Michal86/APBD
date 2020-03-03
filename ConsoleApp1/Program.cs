@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -26,7 +27,7 @@ namespace ConsoleApp1
                     }
                 }
 
-                var emails = await GetEmails(args[0]);
+                var emails = await GetEmails(args[1]);
                 //var emails = await GetEmails("https://www.pja.edu.pl/");
 
                 foreach (var email in emails)
@@ -54,38 +55,40 @@ namespace ConsoleApp1
             var httpClient = new HttpClient();
             var listOfEmails = new List<string>();
             HttpResponseMessage response = null;
-            //W sytuacji kiedy podczas pobierania wystąpił błąd - wyświetlamy informację "Błąd w czasie pobierania strony".
 
+            //W sytuacji kiedy podczas pobierania wystąpił błąd - wyświetlamy informację "Błąd w czasie pobierania strony".
             try
             {
                 response = await httpClient.GetAsync(url);
-                string responseBody = await response.Content.ReadAsStringAsync();
-
-                //Powinniśmy w poprawny sposób zwalniać zasoby (wykorzystanie metody Dispose()) związane z wykorzystaniem klasy HttpClient
-                response.Dispose();
-
-                Regex emailRegex = new Regex(@"\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*",  RegexOptions.IgnoreCase);
-                //find items that matches with our pattern
-                MatchCollection emailMatches = emailRegex.Matches(responseBody);
-
-                if (emailMatches.Count == 0)
-                {
-                    Console.WriteLine("Nie znaleziono adresów email");
-                }
-
-                foreach (var emailMatche in emailMatches)
-                {
-                    listOfEmails.Add(emailMatche.ToString());
-                }
-
-                return listOfEmails;
             }
             catch (HttpRequestException e)
             {
                 Console.WriteLine("\nBłąd w czasie pobierania strony");
                 Console.WriteLine("Message :{0} ", e.Message);
-                return "brak";
             }
+
+            //Powinniśmy w poprawny sposób zwalniać zasoby (wykorzystanie metody Dispose()) związane z wykorzystaniem klasy HttpClient
+            string responseBody = await response.Content.ReadAsStringAsync();
+            response.Dispose();
+
+            Regex emailRegex = new Regex(@"\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*",  RegexOptions.IgnoreCase);
+            //find items that matches with our pattern
+            MatchCollection emailMatches = emailRegex.Matches(responseBody);
+
+            if (emailMatches.Count == 0)
+            {
+                Console.WriteLine("Nie znaleziono adresów email");
+            }
+
+            foreach (var emailMatche in emailMatches)
+            {
+                if (!listOfEmails.Contains(emailMatche.ToString()))
+                {
+                    listOfEmails.Add(emailMatche.ToString());
+                }
+            }
+                
+            return listOfEmails;
         }
     }
 }
