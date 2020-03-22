@@ -7,16 +7,17 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Cw3.Controllers
 {
+    //Zadanie 3 - Dodanie kontrolera
     [Route("api/students")]
     [ApiController]
     public class StudentController : ControllerBase
     {
         public string GetStudent()
         {
-            return "Kowalski, Malewski, Test";
+            return "Kowalski, Malewski, Test, Radzewicz, H4x0r, Woźniak";
         }
 
-
+        //Zadanie 4 - przekazywanie parametru jako URL segment
         [HttpGet("{id}")]
         public IActionResult GetStudent(int id)
         {
@@ -31,6 +32,12 @@ namespace Cw3.Controllers
             return NotFound("Nie znaleziono studenta");
         }
 
+        //Zadanie 5 - przekazywane danych z pomocą QueryString
+        [HttpGet]
+        public string GetStudents(String orderBy)
+        {
+            return $"Kowalki, Malewski, Testowy, Andrzejewski sortowanie={orderBy}";
+        }
     }
 
 
