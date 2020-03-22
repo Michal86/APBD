@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Cw3.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -32,12 +33,25 @@ namespace Cw3.Controllers
             return NotFound("Nie znaleziono studenta");
         }
 
+
         //Zadanie 5 - przekazywane danych z pomocą QueryString
         [HttpGet]
         public string GetStudents(String orderBy)
         {
             return $"Kowalki, Malewski, Testowy, Andrzejewski sortowanie={orderBy}";
         }
+
+
+        //Zadanie 6 - przekazywanie danych w ciele żądania
+        [HttpPost]
+        public IActionResult CreateStudent(Student student)
+        {
+            student.IndexNumber = $"s{new Random().Next(1, 20000)}";
+
+            return Ok(student);
+        }
+
+
     }
 
 
