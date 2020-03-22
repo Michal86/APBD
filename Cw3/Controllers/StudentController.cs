@@ -30,16 +30,16 @@ namespace Cw3.Controllers
             {
                 return Ok("Malewski");
             }
-            return NotFound("Nie znaleziono studenta");
+            return NotFound("Nie znaleziono studenta.");
         }
 
 
         //Zadanie 5 - przekazywane danych z pomocą QueryString
-        [HttpGet]
+/*        [HttpGet]
         public string GetStudents(String orderBy)
         {
             return $"Kowalki, Malewski, Testowy, Andrzejewski sortowanie={orderBy}";
-        }
+        }*/
 
 
         //Zadanie 6 - przekazywanie danych w ciele żądania
@@ -52,6 +52,28 @@ namespace Cw3.Controllers
         }
 
 
+        //Zadanie 7 - dodanie dodatkowych metod PUT,DELETE
+        [HttpPut("{id}")]
+        public IActionResult PutStudent(int id)
+        {
+            if (id == 1)
+            {
+                return Ok("Aktualizacja dokończona");
+            }
+
+            return NotFound("Nie znaleziono studenta, aktualizacja przerwana.");
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DelStudent(int id)
+        {
+            if (id == 1)
+            {
+                return Ok("Usuwanie ukończone");
+            }
+
+            return NotFound("Nie znaleziono studenta, operacja przerwana.");
+        }
     }
 
 
