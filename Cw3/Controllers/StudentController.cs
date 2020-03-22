@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Cw3.DAL;
 using Cw3.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +14,14 @@ namespace Cw3.Controllers
     [ApiController]
     public class StudentController : ControllerBase
     {
+        private readonly IDbService _dbService;
+
+        public StudentController(IDbService dbService)
+        {
+            _dbService = dbService;
+        }
+
+
         public string GetStudent()
         {
             return "Kowalski, Malewski, Test, Radzewicz, H4x0r, Woźniak";
@@ -35,7 +44,7 @@ namespace Cw3.Controllers
 
 
         //Zadanie 5 - przekazywane danych z pomocą QueryString
-/*        [HttpGet]
+        /*[HttpGet]
         public string GetStudents(String orderBy)
         {
             return $"Kowalki, Malewski, Testowy, Andrzejewski sortowanie={orderBy}";
@@ -74,8 +83,15 @@ namespace Cw3.Controllers
 
             return NotFound("Nie znaleziono studenta, operacja przerwana.");
         }
+
+
+        //Zadanie 8 - dodanie sztucznej bazy danych
+        [HttpGet]
+        public IActionResult GetStudents(String orderBy)
+        {
+            return Ok(_dbService.GetStudents());
+        }
+
     }
-
-
 
 }
