@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Cw3.DAL;
-using Cw3.Models;
+using Cw2.DAL;
+using Cw2.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Cw3.Controllers
+namespace Cw2.Controllers
 {
     //Zadanie 3 - Dodanie kontrolera
     [Route("api/students")]

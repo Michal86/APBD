@@ -1,10 +1,10 @@
-﻿using Cw3.Models;
+﻿using Cw2.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Cw3.DAL
+namespace Cw2.DAL
 {
     public class MockDbService : IDbService
     {
