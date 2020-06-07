@@ -23,15 +23,21 @@ namespace zajecia6.Controllers
         }
         //--------------
 
-        //pobierac dane lekarza - wg id
-        [HttpGet ("{id}")]
-        public IActionResult getBySurname(int id)
+ 
+        [HttpGet("{id}")]
+        public IActionResult GetBySurname(int id)
         {
             Doctor doctor = _context.Doctors.Find(id);
+
+            if (null == doctor)
+            {
+                return NotFound();
+            }
+
             return Ok(doctor);
         }
 
-        //pobierac dane lekarzy
+        //Pobierac dane lekarzy
         //api/hc
         [HttpGet]
         public IActionResult GetDoctors()
@@ -39,30 +45,25 @@ namespace zajecia6.Controllers
             return Ok(_context.Doctors.ToList());
         }
 
-        //dodawać nowego lekarza
-        //api/hc/{id}
+        //Dodawać nowego lekarza
+        //api/hc/
         [HttpPost]
-        public IActionResult AddDoctor(string fname, string lname, string email)
+        public IActionResult PostDoctor([Bind("IdDoctor, FirstName, LastName, Email")] Doctor newDoc)
         {
             try
             {
+                if (null != _context.Doctors.Find(newDoc))
+                {
+                    return BadRequest();
+                }
 
                 int idLast = _context.Doctors.Count();
-            
-                Doctor _newDoc = new Doctor();
-                //_newDoc.IdDoctor = idLast;
-                _newDoc.FirstName = fname;
-                _newDoc.LastName = lname;
-                _newDoc.Email = email;
-            
-
-
                 //---
-                _context.Doctors.Add(_newDoc);
+
+                _context.Doctors.Add(newDoc);
                 _context.SaveChanges();
 
-
-                return Ok("Doctors in db: "+ idLast + "\n New: "+ _newDoc);
+                return Ok("Doctors in db: "+ idLast + "\n New: "+ newDoc);
             }
             catch (Exception e)
             {
@@ -72,30 +73,38 @@ namespace zajecia6.Controllers
 
         //change specific Doctor's data
         //api/hc/3?fname=checkPUT&lname=PUTWorks&email=put@op.pl
-        [HttpPut("{id}")]
-        public IActionResult setDoctor(int id, string fname, string lname, string email)
+        [HttpPut]
+        public IActionResult EditDoctor([Bind("IdDoctor, FirstName, LastName, Email")] Doctor doctor)
         {
-            Doctor doctor = _context.Doctors.Find(id);
-            doctor.FirstName = fname;
-            doctor.LastName = lname;
-            doctor.Email = email;
+            if (null == _context.Doctors.Find(doctor))
+            {
+                return BadRequest();
+            }
 
-            _context.Doctors.Update(doctor);
+            //---
+            _context.Update(doctor);
             _context.SaveChanges();
 
-            return Ok("Data changed: "+ doctor);
+            return Ok("Data is updated: "+ doctor);
         }
 
         //remove specified by id Doctor
-        [HttpDelete ("{id}")]
-        public IActionResult deleteDoctor(int id)
+        [HttpDelete]
+        public IActionResult DeleteDoctor(int id)
         {
             Doctor doctor = _context.Doctors.Find(id);
 
-            _context.Doctors.Remove(doctor);
-            _context.SaveChanges();
+            if (null != doctor)
+            {
+                _context.Doctors.Remove(doctor);
+                _context.SaveChanges();
+            }
+            else
+            {
+                return NotFound();
+            }
 
-            return Ok(doctor);
+            return Ok("Deleted");
         }
     }
 }

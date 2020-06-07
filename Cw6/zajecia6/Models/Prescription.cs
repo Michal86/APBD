@@ -20,7 +20,10 @@ namespace zajecia6.Models
         //----
         public int IdDoctor { get; set; }
         public Doctor Doctor { get; set; }
+
         public int IdPatient { get; set; }
         public Patient Patient { get; set; }
+
+        public Prescription_Medicament PrescriptionMedicament { get; set; }
     }
 }

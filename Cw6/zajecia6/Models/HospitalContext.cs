@@ -17,7 +17,6 @@ namespace zajecia6.Models
         public HospitalContext(DbContextOptions options) : base(options)
         {
         }
-
         //----------------
 
 
@@ -25,6 +24,16 @@ namespace zajecia6.Models
         //----------------
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+            modelBuilder.Entity<Prescription_Medicament>()
+                .HasKey(pm => new { pm.IdMedicament, pm.IdPrescription });
+
+            modelBuilder.Entity<Prescription>()
+                .HasOne(p => p.PrescriptionMedicament)
+                .WithOne(p => p.Prescription)
+                .HasForeignKey<Prescription_Medicament>(pm => pm.IdPrescription);
+
+
             modelBuilder.Entity<Doctor>().HasData(
                 new Doctor
                 {
