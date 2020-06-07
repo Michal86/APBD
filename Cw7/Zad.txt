@@ -1,0 +1,25 @@
+Zadanie 1. 
+Zaprojektuj koñcówkê, która bêdzie zwracaæ listê zamówieñ z³o¿onych przez klienta o podanym nazwisku. Je¿eli nie zostanie przes³ane nazwisko klienta nale¿y zwróciæ listê zawieraj¹c¹ zamówienia wszystkich klientów. Lista wynikowa nie musi zawieraæ informacji dotycz¹cych pracownika, który by³ odpowiedzialny za przyjêcie zamówienia lub danych osobowych klienta. Musi natomiast uwzglêdniæ co wchodzi³o w sk³ad danego zamówienia (jakie wyroby cukiernicze by³y do niego wybrane). Pamiêtaj o zwracaniu poprawnych kodów b³êdów. 
+Przyk³adowe wywo³anie koñcówki: 
+GET: /api/orders 
+
+
+Zadanie 2. 
+ Zaprojektuj koñcówkê, która pozwoli na dodanie nowego zamówienia. Powinna przyjmowaæ informacjê podstawowe potrzebne do dodania zamówienia oraz kolekcjê wyrobów cukierniczych, które powinny wejœæ w jego sk³ad. Je¿eli zosta³ podany wyrób, którego nie ma w bazie nale¿y przerwaæ przetwarzanie ¿¹dania i zwróciæ odpowiedni status b³êdu. ID klienta sk³adaj¹cego za³o¿enie powinno byæ podane jako czêœæ segmentu URL. Ca³e zadanie powinno zostaæ zrealizowane za pomoc¹ jednej transakcji. 
+01.06.2020 
+Przyk³adowe wywo³anie koñcówki: 
+GET: /api/clients/1/orders 
+ Body: 
+ { 
+ "dataPrzyjecia":"2020-06-01", 
+ "uwagi":"Proszê przygotowaæ to na najbli¿szy pi¹tek", 
+ "wyroby":[ 
+   { 
+    "ilosc":"1", 
+    "wyrob":"Tort urodzinowy imienny", 
+    "uwagi":"Napis na torcie: Wszystkiego najlepszego!" 
+   } 
+  ] 
+} 
+ 
+Pamiêtaj o: • Poprawnie nazywaæ zmienne, kontrolera itp.  • Pamiêtaj o utrzymaniu odpowiedniej struktury kodu.  • Pamiêtaj o wstrzykiwaniu zale¿noœci.  • Pamiêtaj o odpowiedniej obs³udze b³êdów. 
