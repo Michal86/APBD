@@ -25,7 +25,7 @@ namespace zajecia6.Controllers
 
  
         [HttpGet("{id}")]
-        public IActionResult GetBySurname(int id)
+        public IActionResult GetByID(int id)
         {
             Doctor doctor = _context.Doctors.Find(id);
 
