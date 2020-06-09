@@ -21,7 +21,11 @@ namespace Cw7.Controllers
         //--------------
 
 
-
+        [HttpGet]
+        public IActionResult GetClients()
+        {
+            return Ok(_context.Klienci.ToList());
+        }
 
 
     }

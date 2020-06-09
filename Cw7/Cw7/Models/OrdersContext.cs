@@ -24,8 +24,19 @@ namespace Cw7.Models
         //OnModelCreating
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Zamowienie>().HasKey(x => new {x.Klient, x.IdPracownik });
+            modelBuilder.Entity<Zamowienie>()
+                .HasOne<Klient>(z => z.Klient)
+                .WithMany(k => k.Zamowienia)
+                .HasForeignKey(zi => zi.IdKlient);
 
+            modelBuilder.Entity<Zamowienie>()
+                .HasOne<Pracownik>(z => z.Pracownik)
+                .WithMany(p => p.Zamowienia)
+                .HasForeignKey(zi => zi.IdPracownik);
+
+
+            modelBuilder.Entity<Zamowienie_WyrobCukierniczy>()
+                .HasKey(zwc => new { zwc.IdWyrobuCukierniczego, zwc.IdZamowienia });
 
 
         }

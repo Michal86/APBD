@@ -16,5 +16,7 @@ namespace Cw7.Models
         [MaxLength(40)] public string Typ { get; set; }
 
 
+        //---
+        public List<Zamowienie_WyrobCukierniczy> Zam_WyrobCuier { get; set; }
     }
 }
