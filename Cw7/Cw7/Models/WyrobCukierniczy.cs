@@ -10,13 +10,13 @@ namespace Cw7.Models
     [Table("WyrobCukierniczy")]
     public class WyrobCukierniczy
     {
-        [Key] public int IdWyrobuCukierniczego { get; set; }
+        [Key] public int WyrobCukierniczyId { get; set; }
         [MaxLength(200)] public string Nazwa { get; set; }
         public float CenaZaSzt { get; set; }
         [MaxLength(40)] public string Typ { get; set; }
 
 
         //---
-        public List<Zamowienie_WyrobCukierniczy> Zam_WyrobCuier { get; set; }
+        public List<Zamowienie_WyrobCukierniczy> Zam_WyrobCukier { get; set; }
     }
 }

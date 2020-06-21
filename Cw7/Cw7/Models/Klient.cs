@@ -10,7 +10,7 @@ namespace Cw7.Models
     [Table("Klient")]
     public class Klient
     {
-        [Key] public int IdKlient { get; set; }
+        [Key] public int KlientId { get; set; }
         [MaxLength(50)] public string Imie { get; set; }
         [MaxLength(60)] public string Nazwisko { get; set; }
 
